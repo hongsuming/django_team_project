@@ -82,7 +82,7 @@
 	<div class="adver-board col-sm-12 mx-auto">
 		<h1>광고신청</h1>
 		{% if hpt %}
-		<form class="row row-cols-lg-auto g-3 align-items-center" method="post" action="/adF/" target="main"  enctype="multipart/form-data"> {% csrf_token %}
+		<form class="row row-cols-lg-auto g-3 align-items-center" method="post" action="/adF/" target="main"  enctype="multipart/form-data" onsubmit="window.close();"> {% csrf_token %}
 			<input type="hidden" name="h_name" value="h_name">
 			<input type="hidden" name="h_addr" value="h_addr">
 			<input type="hidden" name="h_tel" value="h_tel">

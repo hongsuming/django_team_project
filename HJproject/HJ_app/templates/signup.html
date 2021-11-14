@@ -126,9 +126,6 @@
 	<div class="signup container">
 		<div class="input-form col-md-12 mx-auto">
 			<h4 class="mb-3">병원등록</h4>
-			{% if context %}
-				{{ context.error }}
-			{% endif %}
 			<form class="validation-form" novalidate action="/registered" method="post" onsubmit="validate()"> {% csrf_token %}
 				<div class="row">
 					<div class="col-mb-3">
@@ -175,8 +172,8 @@
 						<select class="form-control" name="h_kind" id="h_tel">
 							<option value="요양병원(일반요양병원)">요양병원(일반요양병원)</option>
 						</select><br>
-						병원 URL <span style="font-size: .8rem">(선택)</span>
-						<input class="form-control" type="text" name="h_url" id="h_url"><br>
+						병원 URL <span style="font-size: .8rem">(필수)</span>
+						<input class="form-control" required type="text" name="h_url" id="h_url"><br>
 					</div>
 					<hr class="mb-4"> 
 					<div class="custom-control custom-checkbox"> 

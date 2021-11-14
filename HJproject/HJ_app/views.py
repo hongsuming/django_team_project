@@ -60,6 +60,9 @@ def mainFunc(request):
     elder_df['합'] = elder_df.sum(axis=1)
     # print(elder_df)
     
+    hospital_ad = SeoulHospitalAd.objects.order_by("?")
+    print(hospital_ad) # 데이터 확인
+    
     try:
         # 요양병원
         hp = SeoulHospital.objects.all().values()
@@ -67,23 +70,23 @@ def mainFunc(request):
         #hp_df.columns = ['번호', '여부', '전화', '주소', '이름', '종류', '위도', '경도', 'url']
         hp_df.columns = ['번호', '이름', '비밀번호', '여부', '주소', '전화', '종류', '위도', '경도', 'url', '회원가입여부']
     
-        # 광고배너
-        ad = SeoulHospitalAd.objects.all().values()
-        # ad = SeoulHospitalAd.objects.all()
-        ad_df = pd.DataFrame.from_records(ad)
-        ad_df.columns = ['번호', '이름', '주소', '전화', 'url', 'image', 'comment']
-        print(ad_df)
-        
-        # 광고 표시할 병원 랜덤으로 뽑기
-        ad_list = []
-        for i in range(0, len(ad_df)): 
-            ad_list.append(ad_df.iloc[i])
-        
-        ad_list_ran = random.sample(ad_list, 3)
-        print(ad_list_ran)
+        # # 광고배너
+        # ad = SeoulHospitalAd.objects.all().values()
+        # # ad = SeoulHospitalAd.objects.all()
+        # ad_df = pd.DataFrame.from_records(ad)
+        # ad_df.columns = ['번호', '이름', '주소', '전화', 'url', 'image', 'comment']
+        # print(ad_df)
+        #
+        # # 광고 표시할 병원 랜덤으로 뽑기
+        # ad_list = []
+        # for i in range(0, len(ad_df)): 
+        #     ad_list.append(ad_df.iloc[i])
+        #
+        # ad_list_ran = random.sample(ad_list, 1)
+        # print(ad_list_ran, type(ad_list_ran))
         
     except Exception as e:
-        pass
+        print('err : ', e)
 
     # 서울 행정구
     with open('C:\work\psou\HJproject\geo.json', mode='rt', encoding='utf-8') as f:
@@ -104,8 +107,11 @@ def mainFunc(request):
 
  
     # 마커 표시
+    
     for i in range(0, len(hp_df)):
-        folium.Marker([hp_df['위도'][i], hp_df['경도'][i]], popup="<i><a href="+hp_df['url'][i]+">"+hp_df['이름'][i]+"</a></i>").add_to(map)
+        popup = folium.Popup("<i><a href="+hp_df['url'][i]+">"+hp_df['이름'][i]+"</a></i>", max_width=300)
+        icon = folium.Icon(color = 'lightred', icon = 'glyphicon glyphicon-plus')
+        folium.Marker([hp_df['위도'][i], hp_df['경도'][i]], popup = popup, icon = icon).add_to(map)
 
     maps = map._repr_html_()
 
@@ -113,7 +119,7 @@ def mainFunc(request):
     h_name = request.session.get('login')
 
     # return render(request, 'main.html', {'m' : maps, 'login' : h_name})
-    return render(request, 'main.html', {'m' : maps, 'login' : h_name, 'ad' : ad_list_ran})
+    return render(request, 'main.html', {'m' : maps, 'login' : h_name, 'ad' : hospital_ad})
 
 # 병원 등록
 def RegisteredFunc(request): 
